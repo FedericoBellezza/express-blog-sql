@@ -84,6 +84,15 @@ const destroy = (req, res) => {
   // posts.splice(postToDeleteIndex, 1);
   // console.log(posts);
   // res.json(posts);
+
+  // prepariamo la query
+  const sql = "DELETE FROM `blog`.`posts` WHERE `posts`.`id` = ?";
+  const id = req.params.id;
+  // eseguiamo la query!
+  connection.query(sql, [id], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.json(results);
+  });
 };
 
 module.exports = { index, show, store, update, destroy };
