@@ -10,6 +10,7 @@ function index(req, res) {
   const sql = "SELECT * FROM blog.posts";
   // eseguiamo la query!
   connection.query(sql, (err, results) => {
+    console.log(err);
     if (err) return res.status(500).json({ error: "Database query failed" });
     res.json(results);
   });
@@ -28,6 +29,16 @@ function show(req, res) {
   // res.json({
   //   post,
   // });
+
+  // prepariamo la query
+  const sql = "SELECT * FROM `blog`.`posts` WHERE `posts`.`id` = ?";
+  const id = req.params.id;
+  // eseguiamo la query!
+  connection.query(sql, [id], (err, results) => {
+    console.log(err);
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.json(results);
+  });
 }
 
 // - store
@@ -90,6 +101,7 @@ const destroy = (req, res) => {
   const id = req.params.id;
   // eseguiamo la query!
   connection.query(sql, [id], (err, results) => {
+    console.log(err);
     if (err) return res.status(500).json({ error: "Database query failed" });
     res.json(results);
   });
