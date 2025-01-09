@@ -31,7 +31,8 @@ function show(req, res) {
   // });
 
   // prepariamo la query
-  const sql = "SELECT * FROM `blog`.`posts` WHERE `posts`.`id` = ?";
+  const sql =
+    "SELECT post_id, tag_id, title, content, label FROM blog.posts JOIN `post_tag` ON `posts`.`id` = `post_tag`.`post_id` JOIN `tags` ON `tag_id` = `tags`.`id` WHERE `post_id` = ?";
   const id = req.params.id;
   // eseguiamo la query!
   connection.query(sql, [id], (err, results) => {
