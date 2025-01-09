@@ -31,14 +31,25 @@ function show(req, res) {
   // });
 
   // prepariamo la query
-  const sql =
-    "SELECT post_id, tag_id, title, content, label FROM blog.posts JOIN `post_tag` ON `posts`.`id` = `post_tag`.`post_id` JOIN `tags` ON `tag_id` = `tags`.`id` WHERE `post_id` = ?";
+  const postSql = "SELECT * FROM `blog`.`posts` WHERE `posts`.`id` = ?";
+  const tagsSql =
+    "SELECT label FROM blog.tags JOIN post_tag ON tags.id = post_tag.tag_id JOIN posts ON post_id = posts.id WHERE post_id = ?";
   const id = req.params.id;
+
+  let post = [];
+
   // eseguiamo la query!
-  connection.query(sql, [id], (err, results) => {
+  connection.query(postSql, [id], (err, results) => {
     console.log(err);
     if (err) return res.status(500).json({ error: "Database query failed" });
-    res.json(results);
+    post.push(results);
+  });
+
+  connection.query(tagsSql, [id], (err, results) => {
+    console.log(err);
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    post.push(results);
+    res.json(post);
   });
 }
 
